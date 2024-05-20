@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/registration.css' %}">
+</head>
+<body>
+    <div class="content">
+        <h1>Doctor Registration</h1>
+        <form id="registrationForm" method="post">
+            {% csrf_token %}
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" required><br>
+
+            <label for="password1">Password:</label><br>
+            <input type="password" id="password1" name="password1" required><br>
+            <span id="passwordLengthMessage"></span><br>
+            <span id="passwordUpperCaseMessage"></span><br>
+            <span id="passwordSpecialCharMessage"></span><br>
+
+            <label for="password2">Confirm Password:</label><br>
+            <input type="password" id="password2" name="password2" required><br>
+            <span id="passwordMatchMessage"></span><br>
+
+            <button type="submit">Register</button>
+        </form>
+    <script>
+        const password1 = document.getElementById('password1');
+        const password2 = document.getElementById('password2');
+        const passwordLengthMessage = document.getElementById('passwordLengthMessage');
+        const passwordUpperCaseMessage = document.getElementById('passwordUpperCaseMessage');
+        const passwordSpecialCharMessage = document.getElementById('passwordSpecialCharMessage');
+        const passwordMatchMessage = document.getElementById('passwordMatchMessage');
+
+        function showSuccessMessage(element, message) {
+            element.textContent = message;
+            element.style.color = 'green';
+            element.innerHTML = '&#x2714; ' + message; // Checkmark icon
+        }
+
+        function showErrorMessage(element, message) {
+            element.textContent = message;
+            element.style.color = 'red';
+            element.innerHTML = '&#x2718; ' + message; // Cross icon
+        }
+
+        function validatePassword() {
+            const password = password1.value;
+            const regexLength = /.{8,}/;
+            const regexUpperCase = /[A-Z]/;
+            const regexSpecialChar = /[^A-Za-z0-9]/;
+
+            if (regexLength.test(password)) {
+                showSuccessMessage(passwordLengthMessage, 'Password length is valid');
+            } else {
+                showErrorMessage(passwordLengthMessage, 'Password must be at least 8 characters long');
+            }
+
+            if (regexUpperCase.test(password)) {
+                showSuccessMessage(passwordUpperCaseMessage, 'Password contains uppercase letter');
+            } else {
+                showErrorMessage(passwordUpperCaseMessage, 'Password must contain at least one uppercase letter');
+            }
+
+            if (regexSpecialChar.test(password)) {
+                showSuccessMessage(passwordSpecialCharMessage, 'Password contains special character');
+            } else {
+                showErrorMessage(passwordSpecialCharMessage, 'Password must contain at least one special character');
+            }
+        }
+
+        function validatePasswordMatch() {
+            const passwordMatch = password1.value === password2.value;
+            if (passwordMatch) {
+                showSuccessMessage(passwordMatchMessage, 'Passwords match');
+            } else {
+                showErrorMessage(passwordMatchMessage, 'Passwords do not match');
+            }
+        }
+
+        password1.addEventListener('input', validatePassword);
+        password2.addEventListener('input', validatePasswordMatch);
+    </script>
+</body>
+</html>
