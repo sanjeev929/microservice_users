@@ -13,7 +13,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    width: 900x;
+    width: 10%;
     margin: 0 auto;
 }
 
@@ -38,6 +38,7 @@ label {
 }
 
 input[type="text"],
+input[type="email"],
 input[type="password"],
 button[type="submit"] {
     width: 100%;

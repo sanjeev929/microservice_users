@@ -9,12 +9,13 @@
 </head>
 <body>
     <div class="content">
-        <h1>Doctor Registration</h1>
-        <form id="registrationForm" method="post">
+        <h1>Patient Registration</h1>
+        <form id="registrationForm" method="post" action="/registration/">
             {% csrf_token %}
-            <label for="username">Username:</label><br>
+            <label for="username">Name:</label><br>
             <input type="text" id="username" name="username" required><br>
-
+            <label for="mail">Mail:</label><br>
+            <input type="email" id="mail" name="mail" required><br>
             <label for="password1">Password:</label><br>
             <input type="password" id="password1" name="password1" required><br>
             <span id="passwordLengthMessage"></span><br>
