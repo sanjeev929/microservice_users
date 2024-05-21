@@ -2,11 +2,15 @@ from django.shortcuts import render,redirect
 import pymongo
 from django.conf import settings
 import requests
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 client = pymongo.MongoClient(settings.MONGODB_URI)
 db = client[settings.MONGODB_NAME]
 usercollection = db['users']
 managementcollection = db['management']
+doctorscollection = db['doctors']
 
 def index(request):
     email = request.COOKIES.get('user_email')
@@ -90,7 +94,62 @@ def management(request):
         return render(request, 'management.html')
     return redirect('/login/')
 
+def createdoctor(request):
+    email = request.COOKIES.get('email')
+    user = managementcollection.find_one({"mail": email})
+    if email == user["mail"]:
+        if request.method == "POST":
+            name = request.POST.get('name')
+            dob = request.POST.get('dob')
+            email = request.POST.get('email')
+            study = request.POST.get('study')
+            specialist = request.POST.get('specialist')
+            if 'doctors' not in db.list_collection_names():
+                db.create_collection('doctors')
+            doctorscollection = db['doctors']
+            if doctorscollection.find_one({"mail": email}):
+                context={
+                    'message':'Email has already been taken'
+                }
+                return render(request, 'createdoctor.html',context)
+
+            doctor_data = {
+                "name": name,
+                "dob":dob,
+                "mail": email,
+                "study":study,
+                "specialist":specialist
+                
+            }
+            doctorscollection.insert_one(doctor_data)
+            user = doctorscollection.find_one({"mail": email})
+            print(user["_id"])
+            send_email_with_link(email,user["_id"])
+            return render(request, 'createdoctor.html')
+        if request.method == "GET":
+            return render(request, 'createdoctor.html')
+    return redirect('/login/')
+
 def logout(request):
     response = redirect('/login/')
     response.delete_cookie('email')
     return response
+
+def send_email_with_link(email, doctor_id):
+    message = MIMEMultipart()
+    message["From"] = "Midical Department" 
+    message["To"] = email
+    message["Subject"] = "Set Password"
+    
+    # HTML body with the link as an anchor tag
+    body = f'<p>Click the following link to set your password: <a href="http://192.168.67.87:8000/set-password/?id={doctor_id}">Set Password</a></p>'
+    
+    # Attach HTML body to the message
+    message.attach(MIMEText(body, "html"))
+
+    s = smtplib.SMTP('smtp.gmail.com', 587)
+    s.starttls()
+    s.login("sanjeevsanju929@gmail.com", "fhge kait cnqe mjba")
+    s.sendmail("sanjeevsanju929@gmail.com", email, message.as_string())
+    s.quit()
+    return {"success"}
