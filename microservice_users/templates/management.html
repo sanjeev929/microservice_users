@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/admin.css' %}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/management/">Home</a></li>
+            <li><a href="/createdoctor/">Create Doctor</a></li>
+            <li><a href="/deletedoctore/">Delete Doctor</a></li>
+            <li><a href="/editdoctore/">Edit Doctor</a></li>
+            <li class="logout"><a href="/logout/">logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+    </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+/* Navigation bar styles */
+nav {
+    background: linear-gradient(135deg, #007bff 0%, #007bff 50%, white 50%, white 100%);
+    padding: 10px 20px; /* Add padding to adjust spacing */
+    border: 2px solid #007bff; /* Outer border */
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+nav ul li {
+    float: left;
+}
+
+nav ul li.logout {
+    float: right; /* Align the logout link to the right */
+}
+
+nav ul li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 15px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s; 
+    border-radius: 5px;
+    font-weight: bold;
+}
+nav ul li.logout a {
+    display: block;
+    color: #007bff;
+    text-align: center;
+    padding: 15px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s; 
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+nav ul li.logout a:hover {
+    background-color: #007bff;
+    color: #fafafa;
+}
+
+nav ul li a:hover {
+    background-color: #fafafa;
+    color: #007bff;
+}
