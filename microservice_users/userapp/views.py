@@ -5,6 +5,7 @@ import requests
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from bson import ObjectId
 
 client = pymongo.MongoClient(settings.MONGODB_URI)
 db = client[settings.MONGODB_NAME]
@@ -90,6 +91,7 @@ def login(request):
 def management(request):
     email = request.COOKIES.get('email')
     user = managementcollection.find_one({"mail": email})
+    print(email,user)
     if email == user["mail"]:
         return render(request, 'management.html')
     return redirect('/login/')
@@ -135,6 +137,18 @@ def logout(request):
     response.delete_cookie('email')
     return response
 
+
+def doctorsetpassword(request):
+    doctor_id = request.GET.get('id')
+    if request.method == 'POST':
+        doctor_id = request.POST.get('doctor_id')
+        new_password = request.POST.get('password')
+        db['doctors'].update_one({'_id': ObjectId(doctor_id)}, {'$set': {'password': new_password}})
+        return redirect('/login/') 
+    context={
+        "doctor_id":doctor_id
+    }
+    return render(request,"doctorsetpassword.html",context)
 def send_email_with_link(email, doctor_id):
     message = MIMEMultipart()
     message["From"] = "Midical Department" 
@@ -142,7 +156,7 @@ def send_email_with_link(email, doctor_id):
     message["Subject"] = "Set Password"
     
     # HTML body with the link as an anchor tag
-    body = f'<p>Click the following link to set your password: <a href="http://192.168.67.87:8000/set-password/?id={doctor_id}">Set Password</a></p>'
+    body = f'<p>Click the following link to set your password: <a href="http://192.168.249.87:8000/doctorsetpassword/?id={doctor_id}">Set Password</a></p>'
     
     # Attach HTML body to the message
     message.attach(MIMEText(body, "html"))

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page - Create Doctor</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/createdoctor.css' %}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class="{% if request.path == '/management/' %}active{% endif %}"><a href="/management/">Home</a></li>
+            <li class="{% if request.path == '/createdoctor/' %}active{% endif %}"><a href="/createdoctor/">Create Doctor</a></li>
+            <li class="{% if request.path == '/deletedoctor/' %}active{% endif %}"><a href="/deletedoctor/">Delete Doctor</a></li>
+            <li class="{% if request.path == '/editdoctor/' %}active{% endif %}"><a href="/editdoctor/">Edit Doctor</a></li>
+            <li class="logout"><a href="/logout/">Logout</a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <h2>Create Doctor</h2>
+        <form method="post" action="/createdoctor/">
+            {% csrf_token %}
+            {% if message %}
+            <span id="message" class="error-message">{{ message }}</span><br>
+            {% endif %}
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" required><br>
+            
+            <label for="dob">Date of Birth:</label><br>
+            <input type="date" id="dob" name="dob" required><br>
+            
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" required><br>
+            
+            <label for="study">Study:</label><br>
+            <select id="study" name="study" required>
+                <option value="">Select Study</option>
+                <option value="MBBS">MBBS</option>
+                <option value="MD">MD</option>
+                <option value="DO">DO</option>
+                <option value="PhD">PhD</option>
+                <!-- Add more options as needed -->
+            </select><br>
+            
+            <label for="specialist">Specialist:</label><br>
+            <select id="specialist" name="specialist" required>
+                <option value="">Select Specialist</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Dermatology">Dermatology</option>
+                <option value="Neurology">Neurology</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="General Surgery">General Surgery</option>
+                <!-- Add more options as needed -->
+            </select><br>
+            
+            <button type="submit">Create Doctor</button>
+        </form>
+    </div>
+</body>
+</html>
