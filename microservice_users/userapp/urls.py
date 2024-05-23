@@ -8,5 +8,6 @@ urlpatterns=[
     path('logout/',views.logout,name='logout'),
     path('management/',views.management,name='management'),
     path('createdoctor/',views.createdoctor,name='createdoctor'),
-    path('doctorsetpassword/',views.doctorsetpassword,name='doctorsetpassword')
+    path('doctorsetpassword/',views.doctorsetpassword,name='doctorsetpassword'),
+    path('editdoctor/',views.editdoctor,name="editdoctor")
 ]

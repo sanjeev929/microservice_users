@@ -75,7 +75,7 @@ body {
     background: white;
     padding: 20px;
     border-radius: 10px;
-    max-width: 500px;
+    max-width: 900px;
     margin: 40px auto;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -91,10 +91,10 @@ form label {
 }
 
 form input, form select {
-    width: 95%;
+    width: 100%;
     padding: 10px;
     margin-bottom: 20px;
-    border: 2px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 5px;
 }
 
@@ -119,4 +119,45 @@ span {
 }
 .error-message {
     color: #FF6347;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+/* Input field styles */
+input[type="text"],
+input[type="email"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Ensure padding and border are included in width */
+    margin-bottom: 10px;
+}
+
+/* Button styles */
+button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
 }

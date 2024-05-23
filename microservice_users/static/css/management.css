@@ -63,3 +63,10 @@ nav ul li a:hover {
     background-color: #ffffff;
     color: #0056b3;
 }
+/* Form and page styles */
+body {
+    background: linear-gradient(135deg, #007bff 0%, #007bff 50%, white 50%, white 100%);
+    font-family: Arial, sans-serif;
+    color: #333;
+    padding: 20px;
+}

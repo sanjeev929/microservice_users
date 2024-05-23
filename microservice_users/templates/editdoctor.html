@@ -5,57 +5,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page - Create Doctor</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/createdoctor.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/editdoctor.css' %}">
 </head>
 <body>
     <nav>
         <ul>
             <li class="{% if request.path == '/management/' %}active{% endif %}"><a href="/management/">Home</a></li>
             <li class="{% if request.path == '/createdoctor/' %}active{% endif %}"><a href="/createdoctor/">Create Doctor</a></li>
-            <li class="{% if request.path == '/deletedoctor/' %}active{% endif %}"><a href="/deletedoctor/">Delete Doctor</a></li>
             <li class="{% if request.path == '/editdoctor/' %}active{% endif %}"><a href="/editdoctor/">Edit Doctor</a></li>
+            <li class="{% if request.path == '/deletedoctor/' %}active{% endif %}"><a href="/deletedoctor/">Delete Doctor</a></li>
             <li class="logout"><a href="/logout/">Logout</a></li>
         </ul>
     </nav>
     <div class="content">
-        <h2>Create Doctor</h2>
-        <form method="post" action="/createdoctor/">
-            {% csrf_token %}
-            {% if message %}
-            <span id="message" class="error-message">{{ message }}</span><br>
-            {% endif %}
-            <label for="name">Name:</label><br>
-            <input type="text" id="name" name="name" required><br>
-            
-            <label for="dob">Date of Birth:</label><br>
-            <input type="date" id="dob" name="dob" required><br>
-            
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br>
-            
-            <label for="study">Study:</label><br>
-            <select id="study" name="study" required>
-                <option value="">Select Study</option>
-                <option value="MBBS">MBBS</option>
-                <option value="MD">MD</option>
-                <option value="DO">DO</option>
-                <option value="PhD">PhD</option>
-                <!-- Add more options as needed -->
-            </select><br>
-            
-            <label for="specialist">Specialist:</label><br>
-            <select id="specialist" name="specialist" required>
-                <option value="">Select Specialist</option>
-                <option value="Cardiology">Cardiology</option>
-                <option value="Dermatology">Dermatology</option>
-                <option value="Neurology">Neurology</option>
-                <option value="Pediatrics">Pediatrics</option>
-                <option value="General Surgery">General Surgery</option>
-                <!-- Add more options as needed -->
-            </select><br>
-            
-            <button type="submit">Create Doctor</button>
-        </form>
+        <h2>Edit Doctors</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th>Study</th>
+                <th>Specialist</th>
+                <th>Actions</th>
+            </tr>
+            {% for doctor in alldoctors %}
+            <tr>
+                <form method="post" action="/editdoctor/">
+                    {% csrf_token %}
+                    <td><input type="text" name="name" value="{{ doctor.name }}"></td>
+                    <td><input type="date" name="dob" value="{{ doctor.dob }}"></td>
+                    <input type="hidden" name="email" value="{{ doctor.mail }}">
+                    <td>
+                        <select name="study">
+                            <option value="MBBS" {% if doctor.study == 'MBBS' %}selected{% endif %}>MBBS</option>
+                            <option value="MD" {% if doctor.study == 'MD' %}selected{% endif %}>MD</option>
+                            <option value="DO" {% if doctor.study == 'DO' %}selected{% endif %}>DO</option>
+                            <option value="PhD" {% if doctor.study == 'PhD' %}selected{% endif %}>PhD</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </td>
+                    <td>
+                        <select name="specialist">
+                            <option value="Cardiology" {% if doctor.specialist == 'Cardiology' %}selected{% endif %}>Cardiology</option>
+                            <option value="Dermatology" {% if doctor.specialist == 'Dermatology' %}selected{% endif %}>Dermatology</option>
+                            <option value="Neurology" {% if doctor.specialist == 'Neurology' %}selected{% endif %}>Neurology</option>
+                            <option value="Pediatrics" {% if doctor.specialist == 'Pediatrics' %}selected{% endif %}>Pediatrics</option>
+                            <option value="General Surgery" {% if doctor.specialist == 'General Surgery' %}selected{% endif %}>General Surgery</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </td>
+                    <td><button type="submit">Save</button></td>
+                </form>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 </body>
 </html>

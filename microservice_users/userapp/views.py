@@ -12,7 +12,7 @@ db = client[settings.MONGODB_NAME]
 usercollection = db['users']
 managementcollection = db['management']
 doctorscollection = db['doctors']
-
+ipaddress = "http://192.168.249.87:8000"
 def index(request):
     email = request.COOKIES.get('user_email')
     # if email:
@@ -149,6 +149,22 @@ def doctorsetpassword(request):
         "doctor_id":doctor_id
     }
     return render(request,"doctorsetpassword.html",context)
+
+def editdoctor(request):
+    if request.method == "POST":
+        name = request.POST["name"]
+        dob = request.POST["dob"]
+        email = request.POST["email"]
+        study = request.POST["study"]
+        specialist = request.POST["specialist"]
+        doctorscollection.update_one({'mail': email}, {'$set': {'name': name,"dob":dob,"study":study,"specialist":specialist}})
+    alldoctor = doctorscollection.find()
+    alldoctor = list(alldoctor)
+    context={
+        "alldoctors":alldoctor
+    }
+    return render(request,"editdoctor.html",context)
+
 def send_email_with_link(email, doctor_id):
     message = MIMEMultipart()
     message["From"] = "Midical Department" 
@@ -156,7 +172,7 @@ def send_email_with_link(email, doctor_id):
     message["Subject"] = "Set Password"
     
     # HTML body with the link as an anchor tag
-    body = f'<p>Click the following link to set your password: <a href="http://192.168.249.87:8000/doctorsetpassword/?id={doctor_id}">Set Password</a></p>'
+    body = f'<p>Click the following link to set your password: <a href="{ipaddress}/doctorsetpassword/?id={doctor_id}">Set Password</a></p>'
     
     # Attach HTML body to the message
     message.attach(MIMEText(body, "html"))
