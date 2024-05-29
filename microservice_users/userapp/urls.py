@@ -9,5 +9,6 @@ urlpatterns=[
     path('management/',views.management,name='management'),
     path('createdoctor/',views.createdoctor,name='createdoctor'),
     path('doctorsetpassword/',views.doctorsetpassword,name='doctorsetpassword'),
-    path('editdoctor/',views.editdoctor,name="editdoctor")
+    path('editdoctor/',views.editdoctor,name="editdoctor"),
+    path('deletedoctor/',views.deletedoctor,name="deletedoctor")
 ]

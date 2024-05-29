@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Page - Edit Doctors</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/editdoctor.css' %}">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li class="{% if request.path == '/management/' %}active{% endif %}"><a href="/management/">Home</a></li>
+      <li class="{% if request.path == '/createdoctor/' %}active{% endif %}"><a href="/createdoctor/">Create Doctor</a></li>
+      <li class="{% if request.path == '/editdoctor/' %}active{% endif %}"><a href="/editdoctor/">Edit Doctor</a></li>
+      <li class="{% if request.path == '/deletedoctor/' %}active{% endif %}"><a href="/deletedoctor/">Delete Doctor</a></li>
+      <li class="logout"><a href="/logout/">Logout</a></li>
+    </ul>
+  </nav>
+  <div class="content">
+    <h2>Edit Doctors</h2>
+    <form method="post" action="/deletedoctor/">
+      {% csrf_token %}
+      <div class="doctor-selection">
+        <label for="doctor-select">Select Doctor:</label>
+        <select id="doctor-select" name="name">
+          {% for doctor in alldoctors %}
+          <option value="{{ doctor.mail }}">{{ doctor.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+</body>
+</html>

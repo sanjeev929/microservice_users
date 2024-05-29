@@ -165,16 +165,24 @@ def editdoctor(request):
     }
     return render(request,"editdoctor.html",context)
 
+def deletedoctor(request):
+    if request.method == "POST":
+        email = request.POST["name"]
+        print(email)
+        doctorscollection.delete_one({'mail': email})
+    alldoctor = doctorscollection.find()
+    alldoctor = list(alldoctor)
+    context={
+        "alldoctors":alldoctor
+    }
+    return render(request,"deletedoctor.html",context)
+
 def send_email_with_link(email, doctor_id):
     message = MIMEMultipart()
     message["From"] = "Midical Department" 
     message["To"] = email
     message["Subject"] = "Set Password"
-    
-    # HTML body with the link as an anchor tag
     body = f'<p>Click the following link to set your password: <a href="{ipaddress}/doctorsetpassword/?id={doctor_id}">Set Password</a></p>'
-    
-    # Attach HTML body to the message
     message.attach(MIMEText(body, "html"))
 
     s = smtplib.SMTP('smtp.gmail.com', 587)
