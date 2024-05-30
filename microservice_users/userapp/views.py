@@ -6,6 +6,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from bson import ObjectId
+from django.middleware.csrf import get_token
 
 client = pymongo.MongoClient(settings.MONGODB_URI)
 db = client[settings.MONGODB_NAME]
@@ -13,20 +14,41 @@ usercollection = db['users']
 managementcollection = db['management']
 doctorscollection = db['doctors']
 ipaddress = "http://192.168.249.87:8000"
-def index(request):
-    email = request.COOKIES.get('user_email')
-    # if email:
-    #     server_b_url = 'http://127.0.0.1:8001/indexget/'
-    #     data = {'email': email}
-    #     response = requests.post(server_b_url, data=data)
 
-    #     if response.status_code == 200:
-    #         return render(request, 'index.html')
-    #     else:
-    #        return redirect('/login/')
-    # else:
-    #     return redirect('/login/')
-    return render(request, 'index.html')
+
+def index(request):
+    email = request.COOKIES.get('email')
+    print(email)
+
+    if email:
+        server_b_url = 'http://127.0.0.1:8001/userindex/'
+        data = {'email': email}
+
+        try:
+            initial_response = requests.post(server_b_url)
+            print("cccccccccccc")
+            csrftoken = initial_response.cookies['csrftoken']
+            headers = {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json'
+            }
+        
+            response = requests.post(server_b_url, json=data, headers=headers, cookies=initial_response.cookies)
+            print("ddddddddddddd")
+            response.raise_for_status()
+           
+            # Handle successful response
+            response_data = response.json()  # Assuming response is JSON
+            context = {'message': response_data}
+            return render(request, 'index.html', context)
+
+        except requests.exceptions.RequestException as e:
+            print(f"Error sending data: {e}")
+            context = {'message': 'Error sending data to another service'}
+            return render(request, 'index.html', context)
+
+    else:
+        return redirect('/login/')
 
 def registration(request):
     if request.method == 'POST':
@@ -58,10 +80,8 @@ def login(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         role = request.POST.get('role')
-        print(role)
         if role == 'patient':
             user = usercollection.find_one({"mail": email, "password": password})
-            print(user)
             if user:
                 response = redirect("/")
                 response.set_cookie('email', email)
@@ -74,7 +94,6 @@ def login(request):
             
         elif role == 'management':
             user = managementcollection.find_one({"mail": email, "password": password})
-            print(user)
             if user:
                 response = redirect("/management/")
                 response.set_cookie('email', email)
@@ -91,7 +110,6 @@ def login(request):
 def management(request):
     email = request.COOKIES.get('email')
     user = managementcollection.find_one({"mail": email})
-    print(email,user)
     if email == user["mail"]:
         return render(request, 'management.html')
     return redirect('/login/')
@@ -125,7 +143,6 @@ def createdoctor(request):
             }
             doctorscollection.insert_one(doctor_data)
             user = doctorscollection.find_one({"mail": email})
-            print(user["_id"])
             send_email_with_link(email,user["_id"])
             return render(request, 'createdoctor.html')
         if request.method == "GET":
@@ -168,7 +185,6 @@ def editdoctor(request):
 def deletedoctor(request):
     if request.method == "POST":
         email = request.POST["name"]
-        print(email)
         doctorscollection.delete_one({'mail': email})
     alldoctor = doctorscollection.find()
     alldoctor = list(alldoctor)
