@@ -19,36 +19,43 @@ ipaddress = "http://192.168.249.87:8000"
 def index(request):
     email = request.COOKIES.get('email')
     print(email)
-
     if email:
-        server_b_url = 'http://127.0.0.1:8001/userindex/'
-        data = {'email': email}
+        if request.method == "POST":
+            server_b_url = 'http://127.0.0.1:8001/userindex/'
+            data = {'email': email}
 
-        try:
-            initial_response = requests.post(server_b_url)
-            print("cccccccccccc")
-            csrftoken = initial_response.cookies['csrftoken']
-            headers = {
-                'X-CSRFToken': csrftoken,
-                'Content-Type': 'application/json'
-            }
-        
-            response = requests.post(server_b_url, json=data, headers=headers, cookies=initial_response.cookies)
-            print("ddddddddddddd")
-            response.raise_for_status()
-           
-            # Handle successful response
-            response_data = response.json()  # Assuming response is JSON
-            context = {'message': response_data}
-            return render(request, 'index.html', context)
+            try:
+                response = requests.post(server_b_url, json=data)
+                response.raise_for_status()
+                response_data = response.json()
+                context = {'message': response_data}
+                return render(request, 'index.html', context)
 
-        except requests.exceptions.RequestException as e:
-            print(f"Error sending data: {e}")
-            context = {'message': 'Error sending data to another service'}
-            return render(request, 'index.html', context)
+            except requests.exceptions.RequestException as e:
+                print(f"Error sending data: {e}")
+                context = {'message': 'Error sending data to another service'}
+                return render(request, 'index.html', context)
+
+        else:
+            print("================================")
+            server_b_url = 'http://127.0.0.1:8001/userindex/'
+
+            try:
+                response = requests.get(server_b_url)
+                response.raise_for_status()
+                response_data = response.json()
+                print(response_data['doctor_details'])
+                context = {'message': response_data['doctor_details']}
+                return render(request, 'index.html', context)
+
+            except requests.exceptions.RequestException as e:
+                print(f"Error sending data: {e}")
+                context = {'message': 'Error sending data to another service'}
+                return render(request, 'index.html', context)
 
     else:
         return redirect('/login/')
+
 
 def registration(request):
     if request.method == 'POST':
