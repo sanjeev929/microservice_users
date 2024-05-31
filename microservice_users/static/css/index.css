@@ -63,6 +63,7 @@ nav ul li a:hover {
     background-color: #ffffff;
     color: #0056b3;
 }
+
 /* Form and page styles */
 body {
     background: linear-gradient(135deg, #007bff 0%, #007bff 50%, white 50%, white 100%);
@@ -73,4 +74,89 @@ body {
 
 h2 {
     color: #007bff;
+}
+
+/* Card styles */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.card {
+    background-color: white;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    width: calc(33.33% - 20px); /* Adjust width to ensure three cards per row with gaps */
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+    border: none; /* Remove form border */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: grey; /* Add grey border on hover */
+}
+
+.card-button {
+    background: none;
+    border: none;
+    padding: 0;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card h2 {
+    color: #007bff;
+    margin-top: 0;
+}
+
+.card p {
+    margin: 10px 0;
+    color: #333;
+}
+
+.card-button:hover .card-content {
+    background-color: #f0f0f0; /* Change card background color on hover */
+}
+
+/* Ensuring the card-container can handle multiple rows of three cards */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px; /* Adjust the gap as needed */
+}
+
+.card {
+    flex: 1 1 calc(33.33% - 20px);
+    max-width: calc(33.33% - 20px); /* Ensure max width to handle different screen sizes */
+    box-sizing: border-box; /* Ensure padding and border are included in the width and height */
+}
+
+@media (max-width: 768px) {
+    .card {
+        flex: 1 1 calc(50% - 20px);
+        max-width: calc(50% - 20px); /* Adjust for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        flex: 1 1 100%;
+        max-width: 100%; /* Full width on very small screens */
+    }
 }

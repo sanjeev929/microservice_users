@@ -20,23 +20,7 @@ def index(request):
     email = request.COOKIES.get('email')
     print(email)
     if email:
-        if request.method == "POST":
-            server_b_url = 'http://127.0.0.1:8001/userindex/'
-            data = {'email': email}
-
-            try:
-                response = requests.post(server_b_url, json=data)
-                response.raise_for_status()
-                response_data = response.json()
-                context = {'message': response_data}
-                return render(request, 'index.html', context)
-
-            except requests.exceptions.RequestException as e:
-                print(f"Error sending data: {e}")
-                context = {'message': 'Error sending data to another service'}
-                return render(request, 'index.html', context)
-
-        else:
+        if request.method == "GET":
             print("================================")
             server_b_url = 'http://127.0.0.1:8001/userindex/'
 
@@ -45,13 +29,28 @@ def index(request):
                 response.raise_for_status()
                 response_data = response.json()
                 print(response_data['doctor_details'])
-                context = {'message': response_data['doctor_details']}
+                context = {
+                    'message': response_data['doctor_details'],
+                    "email":email
+                    }
                 return render(request, 'index.html', context)
 
             except requests.exceptions.RequestException as e:
                 print(f"Error sending data: {e}")
                 context = {'message': 'Error sending data to another service'}
                 return render(request, 'index.html', context)
+        else:
+            doctor_name = request.POST["doctor_name"]
+            doctor_email = request.POST["doctor_email"]
+            doctor_study = request.POST["doctor_study"]
+            doctor_specialist = request.POST["doctor_specialist"]
+            context ={
+                "doctor_name":doctor_name,
+                "doctor_email":doctor_email,
+                "doctor_study":doctor_study,
+                "doctor_specialist":doctor_specialist
+            }
+            return render(request,"booking.html",context)
 
     else:
         return redirect('/login/')
@@ -199,6 +198,36 @@ def deletedoctor(request):
         "alldoctors":alldoctor
     }
     return render(request,"deletedoctor.html",context)
+
+def book_appointment(request):
+    email = request.COOKIES.get('email')
+    print(email)
+    if email:
+        if request.method == "POST":
+            print("================================")
+            doctor_email = request.POST.get("doctor_email")
+            email = request.POST.get("email")
+            server_b_url = 'http://127.0.0.1:8001/book_appointment/'  # Ensure this URL is correct
+            data = {
+                "email": email,
+                "doctor_email": doctor_email
+            }
+            try:
+                response = requests.post(server_b_url, json=data)
+                response.raise_for_status()
+                response_data = response.json()
+                print(response_data)
+                context = {
+                    'message': response_data,
+                    "email": email
+                }
+                return render(request, 'index.html', context)
+            except requests.exceptions.RequestException as e:
+                print(f"Error sending data: {e}")
+                context = {'message': 'Error sending data to another service'}
+                return render(request, 'index.html', context)
+    else:
+        return redirect('/')
 
 def send_email_with_link(email, doctor_id):
     message = MIMEMultipart()

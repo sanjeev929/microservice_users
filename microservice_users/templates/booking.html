@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page - Create Doctor</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/booking.css' %}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class="{% if request.path == '/management/' %}active{% endif %}"><a href="/management/">Home</a></li>
+            <li class="{% if request.path == '/createdoctor/' %}active{% endif %}"><a href="/appointment/">Appointment</a></li>
+            <li class="logout"><a href="/logout/">Logout</a></li>
+        </ul>
+    </nav>
+    <br><br> 
+    <form class="appointment-form" method="POST" action="/book_appointment/">
+        {% csrf_token %}
+        <h2>Book an Appointment</h2>
+        <label for="name">Dr Name:</label>
+        <input type="text" id="name" name="name" value="{{doctor_name}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
+
+        <input type="hidden" name="email" value="{{doctor_email}}">
+
+        <label for="study">Study:</label>
+        <input type="text" id="study" name="study" value={{doctor_study}} readonly style="background-color: #f0f0f0; cursor: not-allowed;">
+
+        <label for="specialist">Specialist:</label>
+        <input type="text" id="specialist" name="specialist" value={{doctor_specialist}} readonly style="background-color: #f0f0f0; cursor: not-allowed;">
+        
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+        
+        <label for="time">Time:</label>
+        <input type="time" id="time" name="time" required>
+        
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

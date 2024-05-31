@@ -11,12 +11,32 @@
     <nav>
         <ul>
             <li class="{% if request.path == '/management/' %}active{% endif %}"><a href="/management/">Home</a></li>
-            <li class="{% if request.path == '/createdoctor/' %}active{% endif %}"><a href="/createdoctor/">appointment </a></li>
+            <li class="{% if request.path == '/createdoctor/' %}active{% endif %}"><a href="/appointment/">Appointment</a></li>
             <li class="logout"><a href="/logout/">Logout</a></li>
         </ul>
     </nav>
+    <br><br>
     <div class="content">
-        <h1>Hello</h1>
+        <div class="card-container">
+            {% for details in message %}
+            <form action="/" method="post" class="card">
+                {% csrf_token %}
+                <button type="submit" class="card-button">
+                    <div class="card-content">
+                        <h2>Dr.{{ details.name }}</h2>
+                        <p><strong>Email:</strong> {{ details.mail }}</p>
+                        <p><strong>Study:</strong> {{ details.study }}</p>
+                        <p><strong>Specialist:</strong> {{ details.specialist }}</p>
+                        <input type="hidden" name="doctor_name" value="{{ details.name }}">
+                        <input type="hidden" name="doctor_email" value="{{ details.mail }}">
+                        <input type="hidden" name="doctor_study" value="{{ details.study }}">
+                        <input type="hidden" name="doctor_specialist" value="{{ details.specialist }}">
+                        <input type="hidden" name="email" value="{{ email }}">
+                    </div>
+                </button>
+            </form>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>

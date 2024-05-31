@@ -21,15 +21,30 @@ class JSONEncoder(json.JSONEncoder):
 @csrf_exempt
 def userindex(request):
     print("inside")
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        email = data.get('email')
-        print("process b")
-        data = {'processed_email': email, 'additional_data': 'from_2nd_project'}
-        print("process a",data)
-        return JsonResponse(data, status=200)
-    else:
+    if request.method == "GET":
         doctor_details = doctorscollection.find({})
         doctor_details_list = list(doctor_details)
         response_data = {'doctor_details': doctor_details_list}
         return JsonResponse(response_data, encoder=JSONEncoder, status=200)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+    
+@csrf_exempt
+def book_appointment(request):
+    print("inside")
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            email = data.get('email')
+            doctor_email = data.get('doctor_email')
+            print(f"Received email: {email}, doctor_email: {doctor_email}")
+            response_data = {
+                'email': email,
+                'doctor_email': doctor_email
+            }
+            return JsonResponse(response_data, status=200)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON: {e}")
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)

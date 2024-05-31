@@ -10,5 +10,6 @@ urlpatterns=[
     path('createdoctor/',views.createdoctor,name='createdoctor'),
     path('doctorsetpassword/',views.doctorsetpassword,name='doctorsetpassword'),
     path('editdoctor/',views.editdoctor,name="editdoctor"),
-    path('deletedoctor/',views.deletedoctor,name="deletedoctor")
+    path('deletedoctor/',views.deletedoctor,name="deletedoctor"),
+    path('book_appointment/',views.book_appointment,name="book_appointment"),
 ]
