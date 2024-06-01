@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-import pymongo
+import pymongo,json
 from django.conf import settings
 import requests
 import smtplib
@@ -44,14 +44,29 @@ def index(request):
             doctor_email = request.POST["doctor_email"]
             doctor_study = request.POST["doctor_study"]
             doctor_specialist = request.POST["doctor_specialist"]
-            context ={
-                "doctor_name":doctor_name,
-                "doctor_email":doctor_email,
-                "doctor_study":doctor_study,
-                "doctor_specialist":doctor_specialist
+            print("================================")
+            server_b_url = 'http://127.0.0.1:8001/get_doctor_schedule/'  # Ensure this URL is correct
+            data = {
+                "doctor_email": doctor_email,
             }
-            return render(request,"booking.html",context)
-
+            try:
+                response = requests.post(server_b_url, json=data)
+                response.raise_for_status()
+                response_data = response.json()
+                booked_date=response_data["schedule_values"]
+                print(booked_date)
+                booked_date_json = json.dumps(booked_date)
+                context ={
+                    "doctor_name":doctor_name,
+                    "doctor_email":doctor_email,
+                    "doctor_study":doctor_study,
+                    "doctor_specialist":doctor_specialist,
+                    "booked_date":booked_date_json
+                }
+                return render(request,"booking.html",context)
+            except requests.exceptions.RequestException as e:
+                print(f"Error sending data: {e}")
+                return redirect('/')
     else:
         return redirect('/login/')
 
@@ -206,11 +221,14 @@ def book_appointment(request):
         if request.method == "POST":
             print("================================")
             doctor_email = request.POST.get("doctor_email")
-            email = request.POST.get("email")
+            date = request.POST.get("date")
+            time = request.POST.get("time")
             server_b_url = 'http://127.0.0.1:8001/book_appointment/'  # Ensure this URL is correct
             data = {
                 "email": email,
-                "doctor_email": doctor_email
+                "doctor_email": doctor_email,
+                "date":date,
+                "time":time
             }
             try:
                 response = requests.post(server_b_url, json=data)
@@ -221,11 +239,11 @@ def book_appointment(request):
                     'message': response_data,
                     "email": email
                 }
-                return render(request, 'index.html', context)
+                return redirect('/')
             except requests.exceptions.RequestException as e:
                 print(f"Error sending data: {e}")
                 context = {'message': 'Error sending data to another service'}
-                return render(request, 'index.html', context)
+                return redirect('/')
     else:
         return redirect('/')
 

@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page - Create Doctor</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/booking.css' %}">
+    <!-- Include Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
     <nav>
@@ -15,20 +17,20 @@
             <li class="logout"><a href="/logout/">Logout</a></li>
         </ul>
     </nav>
-    <br><br> 
-    <form class="appointment-form" method="POST" action="/book_appointment/">
+    <br><br>
+    <form class="appointment-form" method="POST" action="/book_appointment/" onsubmit="return checkBooking()">
         {% csrf_token %}
         <h2>Book an Appointment</h2>
         <label for="name">Dr Name:</label>
         <input type="text" id="name" name="name" value="{{doctor_name}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
 
-        <input type="hidden" name="email" value="{{doctor_email}}">
+        <input type="hidden" name="doctor_email" value="{{doctor_email}}">
 
         <label for="study">Study:</label>
-        <input type="text" id="study" name="study" value={{doctor_study}} readonly style="background-color: #f0f0f0; cursor: not-allowed;">
+        <input type="text" id="study" name="study" value="{{doctor_study}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
 
         <label for="specialist">Specialist:</label>
-        <input type="text" id="specialist" name="specialist" value={{doctor_specialist}} readonly style="background-color: #f0f0f0; cursor: not-allowed;">
+        <input type="text" id="specialist" name="specialist" value="{{doctor_specialist}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
         
         <label for="date">Date:</label>
         <input type="date" id="date" name="date" required>
@@ -38,5 +40,31 @@
         
         <button type="submit">Submit</button>
     </form>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        function checkBooking() {
+            const selectedDate = document.getElementById("date").value;
+            const selectedTime = document.getElementById("time").value;
+            const bookedDateArray = JSON.parse('{{ booked_date|escapejs }}');
+            const bookedDate = {};
+            bookedDateArray.forEach(entry => {
+                const [date, time] = entry.split('/');
+                bookedDate[date] = time;
+            });
+            if (bookedDate[selectedDate] === selectedTime) {
+                alert("This date and time slot is already booked. Please choose another time.");
+                return false;
+            } else {
+                return true;
+            }
+        }
+        flatpickr("#time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "h:i K",
+            time_24hr: false,
+            minuteIncrement: 15
+        });
+    </script>
+    </body>
 </html>
