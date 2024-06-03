@@ -6,5 +6,6 @@ urlpatterns = [
     path("book_appointment/",views.book_appointment,name="book_appointment"),
     path("get_doctor_schedule/",views.get_doctor_schedule,name="get_doctor_schedule"),
     path("get_schedule_status/",views.get_schedule_status,name="get_schedule_status"),
-    path("doctor_index/",views.doctor_index,name="doctor_index")
+    path("doctor_index/",views.doctor_index,name="doctor_index"),
+    path("status_change/",views.status_change,name="status_change")
 ]

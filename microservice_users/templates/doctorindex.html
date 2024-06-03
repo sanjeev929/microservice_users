@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page - Create Doctor</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/appointment.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/doctorindex.css' %}">
 </head>
 <body>
     <nav>
@@ -33,6 +33,20 @@
                         </span>
                     </p>
                 </div>
+                <div class="card-buttons">
+                    <form method="post" action="/doctorindex/">
+                        {% csrf_token %}
+                        <input type="hidden" name="patient_email" value="{{ details.patient_email }}">
+                        <input type="hidden" name="doctor_email" value="{{ details.doctor_email }}">
+                        <button type="submit" name="action" value="Approved" class="card-button blue">Approve</button>
+                    </form>
+                    <form method="post" action="/doctorindex/">
+                        {% csrf_token %}
+                        <input type="hidden" name="patient_email" value="{{ details.patient_email }}">
+                        <input type="hidden" name="doctor_email" value="{{ details.doctor_email }}">
+                        <button type="submit" name="action" value="Rejected" class="card-button red">Reject</button>
+                    </form>
+                </div>                
             </div>
             {% endfor %}
         </div>

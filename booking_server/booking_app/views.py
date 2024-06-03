@@ -129,4 +129,27 @@ def doctor_index(request):
             print(f"Error decoding JSON: {e}")
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
     else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)    
+        return JsonResponse({'error': 'Invalid request method'}, status=400)   
+
+@csrf_exempt
+def status_change(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            patient_email = data.get('patient_email')
+            doctor_email  = data.get('doctor_email')
+            action  = data.get('action')
+            bookingcollection = db['booking']
+            if action == "Approved":
+                data = bookingcollection.update_many({"patient_email":patient_email,"doctor_email":doctor_email},{"$set":{"status":action}})
+            if action == "Rejected":
+                data =  bookingcollection.delete_many({"patient_email":patient_email,"doctor_email":doctor_email}) 
+            response_data = {
+                "message": "update successfully",
+            }
+            return JsonResponse(response_data,encoder=JSONEncoder, status=200)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON: {e}")
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)     

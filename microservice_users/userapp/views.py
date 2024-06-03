@@ -167,6 +167,24 @@ def doctorindex(request):
             except requests.exceptions.RequestException as e:
                 print(f"Error sending data: {e}")
                 return redirect('/')
+        else:
+            patient_email = request.POST["patient_email"]
+            doctor_email = request.POST["doctor_email"]
+            action = request.POST["action"]
+            print("==========",patient_email,action)
+            server_b_url = 'http://127.0.0.1:8001/status_change/'
+            data = {
+                "patient_email": patient_email,
+                "doctor_email":doctor_email,
+                "action":action
+            }
+            try:
+                response = requests.post(server_b_url, json=data)
+                response.raise_for_status()
+                response_data = response.json()
+            except requests.exceptions.RequestException as e:
+                print(f"Error sending data: {e}")
+            return redirect("/doctorindex/")   
     return redirect('/login/')
 
 def createdoctor(request):
