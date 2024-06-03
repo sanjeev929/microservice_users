@@ -32,7 +32,16 @@
     border-radius: 5px;
 }
 
-
+input#problem {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none; /* Disables resizing */
+}
 
 .appointment-form button {
     background-color: #007bff;

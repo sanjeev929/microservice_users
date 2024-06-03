@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page - Create Doctor</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/appointment.css' %}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class="{% if request.path == '/' %}active{% endif %}"><a href="/">Home</a></li>
+            <li class="{% if request.path == '/appointment/' %}active{% endif %}"><a href="/appointment/">Appointment</a></li>
+            <li class="logout"><a href="/logout/">Logout</a></li>
+        </ul>
+    </nav>
+    <br><br>
+    <div class="content">
+        <div class="card-container">
+            {% for details in message %}
+            <div class="card">
+                <div class="card-content">
+                    <h2>Dr.{{ details.doctor_name }}</h2>
+                    <p><strong>Schedule:</strong> {{ details.schedule }}</p>
+                    <p><strong>Problem:</strong> {{ details.problem }}</p>
+                    <p>
+                        <strong>Status:</strong> 
+                        <span class="status 
+                            {% if details.status == 'Pending' %}status-pending
+                            {% elif details.status == 'Approved' %}status-approved
+                            {% elif details.status == 'Rejected' %}status-rejected
+                            {% endif %}">
+                            {{ details.status }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

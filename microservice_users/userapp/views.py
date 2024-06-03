@@ -18,17 +18,14 @@ ipaddress = "http://192.168.249.87:8000"
 
 def index(request):
     email = request.COOKIES.get('email')
-    print(email)
     if email:
         if request.method == "GET":
-            print("================================")
             server_b_url = 'http://127.0.0.1:8001/userindex/'
 
             try:
                 response = requests.get(server_b_url)
                 response.raise_for_status()
                 response_data = response.json()
-                print(response_data['doctor_details'])
                 context = {
                     'message': response_data['doctor_details'],
                     "email":email
@@ -44,8 +41,7 @@ def index(request):
             doctor_email = request.POST["doctor_email"]
             doctor_study = request.POST["doctor_study"]
             doctor_specialist = request.POST["doctor_specialist"]
-            print("================================")
-            server_b_url = 'http://127.0.0.1:8001/get_doctor_schedule/'  # Ensure this URL is correct
+            server_b_url = 'http://127.0.0.1:8001/get_doctor_schedule/'
             data = {
                 "doctor_email": doctor_email,
             }
@@ -54,7 +50,6 @@ def index(request):
                 response.raise_for_status()
                 response_data = response.json()
                 booked_date=response_data["schedule_values"]
-                print(booked_date)
                 booked_date_json = json.dumps(booked_date)
                 context ={
                     "doctor_name":doctor_name,
@@ -75,6 +70,7 @@ def registration(request):
     if request.method == 'POST':
         name = request.POST['username']
         mail = request.POST['mail']
+        age = request.POST['age']
         password = request.POST['password1']
         if 'users' not in db.list_collection_names():
             db.create_collection('users')
@@ -89,6 +85,7 @@ def registration(request):
         doctor_data = {
             "name": name,
             "mail": mail,
+            "age":age,
             "password": password
         }
         usercollection.insert_one(doctor_data)
@@ -123,7 +120,19 @@ def login(request):
                 context = {
                     'message': 'Invalid email or password or role.'
                 }
-                return render(request, 'login.html', context)    
+                return render(request, 'login.html', context)
+            
+        elif role == 'doctor':
+            user = doctorscollection.find_one({"mail": email, "password": password})
+            if user:
+                response = redirect("/doctorindex/")
+                response.set_cookie('email', email)
+                return response
+            else:
+                context = {
+                    'message': 'Invalid email or password or role.'
+                }
+                return render(request, 'login.html', context)         
             
 
     return render(request, 'login.html')
@@ -133,6 +142,31 @@ def management(request):
     user = managementcollection.find_one({"mail": email})
     if email == user["mail"]:
         return render(request, 'management.html')
+    return redirect('/login/')
+
+def doctorindex(request):
+    doctor_email = request.COOKIES.get('email')
+    print(doctor_email)
+    user = doctorscollection.find_one({"mail": doctor_email})
+    if doctor_email == user["mail"]:
+        if request.method == "GET":
+            server_b_url = 'http://127.0.0.1:8001/doctor_index/'
+            data = {
+                "doctor_email": doctor_email,
+            }
+            try:
+                response = requests.post(server_b_url, json=data)
+                response.raise_for_status()
+                response_data = response.json()
+                pendingcollection=response_data["Pendingcollection"]
+                print(pendingcollection,"=======")
+                context = {
+                    "pendingcollection":pendingcollection
+                }
+                return render(request,"doctorindex.html",context)
+            except requests.exceptions.RequestException as e:
+                print(f"Error sending data: {e}")
+                return redirect('/')
     return redirect('/login/')
 
 def createdoctor(request):
@@ -216,16 +250,19 @@ def deletedoctor(request):
 
 def book_appointment(request):
     email = request.COOKIES.get('email')
-    print(email)
     if email:
         if request.method == "POST":
-            print("================================")
+
             doctor_email = request.POST.get("doctor_email")
+            doctor_name = request.POST.get("nadoctor_nameme")
+            problem = request.POST.get("problem")
             date = request.POST.get("date")
             time = request.POST.get("time")
             server_b_url = 'http://127.0.0.1:8001/book_appointment/'  # Ensure this URL is correct
             data = {
+                "doctor_name":doctor_name,
                 "email": email,
+                "problem":problem,
                 "doctor_email": doctor_email,
                 "date":date,
                 "time":time
@@ -234,7 +271,6 @@ def book_appointment(request):
                 response = requests.post(server_b_url, json=data)
                 response.raise_for_status()
                 response_data = response.json()
-                print(response_data)
                 context = {
                     'message': response_data,
                     "email": email
@@ -246,8 +282,30 @@ def book_appointment(request):
                 return redirect('/')
     else:
         return redirect('/')
+    
+def appointment(request):
+    email = request.COOKIES.get('email')
+    if email:
+        server_b_url = 'http://127.0.0.1:8001/get_schedule_status/'
+        data = {
+            "email": email,
+        }
+        try:
+            response = requests.post(server_b_url, json=data)
+            response.raise_for_status()
+            response_data = response.json()
+            booked_data=response_data["bookingcollection"]
+            print(booked_data)
+            context={
+                "message":booked_data
+            }
+            return render(request,"appointment.html",context)
+        except requests.exceptions.RequestException as e:
+                print(f"Error sending data: {e}")
+    return redirect('/') 
 
 def send_email_with_link(email, doctor_id):
+
     message = MIMEMultipart()
     message["From"] = "Midical Department" 
     message["To"] = email

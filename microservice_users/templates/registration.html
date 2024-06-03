@@ -9,15 +9,18 @@
 </head>
 <body>
     <div class="content">
-        <h1>Patient Registration</h1>
         <br>
         <form id="registrationForm" method="post" action="/registration/">
+            <h3>Patient Registration</h3>
+            <hr>
             {% csrf_token %}
             {%if message%}
             <span id="message" class="error-message">{{message}}</span><br>
             {%endif%}
             <label for="username">Name:</label><br>
             <input type="text" id="username" name="username" required><br>
+            <label for="username">Age:</label><br>
+            <input type="number" id="age" name="age" required><br>
             <label for="mail">Mail:</label><br>
             <input type="email" id="mail" name="mail" required><br>
             <label for="password1">Password:</label><br>

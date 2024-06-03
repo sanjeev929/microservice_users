@@ -10,7 +10,7 @@
 <body>
     <nav>
         <ul>
-            <li class="{% if request.path == '/management/' %}active{% endif %}"><a href="/management/">Home</a></li>
+            <li class="{% if request.path == '/' %}active{% endif %}"><a href="/">Home</a></li>
             <li class="{% if request.path == '/createdoctor/' %}active{% endif %}"><a href="/appointment/">Appointment</a></li>
             <li class="logout"><a href="/logout/">Logout</a></li>
         </ul>
@@ -24,7 +24,6 @@
                 <button type="submit" class="card-button">
                     <div class="card-content">
                         <h2>Dr.{{ details.name }}</h2>
-                        <p><strong>Email:</strong> {{ details.mail }}</p>
                         <p><strong>Study:</strong> {{ details.study }}</p>
                         <p><strong>Specialist:</strong> {{ details.specialist }}</p>
                         <input type="hidden" name="doctor_name" value="{{ details.name }}">

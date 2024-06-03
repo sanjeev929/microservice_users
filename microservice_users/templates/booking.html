@@ -12,7 +12,7 @@
 <body>
     <nav>
         <ul>
-            <li class="{% if request.path == '/management/' %}active{% endif %}"><a href="/management/">Home</a></li>
+            <li class="{% if request.path == '/' %}active{% endif %}"><a href="/">Home</a></li>
             <li class="{% if request.path == '/createdoctor/' %}active{% endif %}"><a href="/appointment/">Appointment</a></li>
             <li class="logout"><a href="/logout/">Logout</a></li>
         </ul>
@@ -22,7 +22,7 @@
         {% csrf_token %}
         <h2>Book an Appointment</h2>
         <label for="name">Dr Name:</label>
-        <input type="text" id="name" name="name" value="{{doctor_name}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
+        <input type="text" id="name" name="nadoctor_nameme" value="{{doctor_name}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
 
         <input type="hidden" name="doctor_email" value="{{doctor_email}}">
 
@@ -32,6 +32,9 @@
         <label for="specialist">Specialist:</label>
         <input type="text" id="specialist" name="specialist" value="{{doctor_specialist}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
         
+        <label for="Problem">Problem:</label>
+        <input type="text" id="problem" name="problem" required>
+
         <label for="date">Date:</label>
         <input type="date" id="date" name="date" required>
         

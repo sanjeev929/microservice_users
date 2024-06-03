@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page - Create Doctor</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/appointment.css' %}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class="{% if request.path == '/doctorindex/' %}active{% endif %}"><a href="/doctorindex/">Home</a></li>
+            <li class="{% if request.path == '/approved/' %}active{% endif %}"><a href="/approved/">Approved</a></li>
+            <li class="logout"><a href="/logout/">Logout</a></li>
+        </ul>
+    </nav>
+    <br><br>
+    <div class="content">
+        <div class="card-container">
+            {% for details in pendingcollection %}
+            <div class="card">
+                <div class="card-content">
+                    <h2>Dr.{{ details.patient_name }}</h2>
+                    <p><strong>Schedule:</strong> {{ details.schedule }}</p>
+                    <p><strong>Problem:</strong> {{ details.problem }}</p>
+                    <p>
+                        <strong>Status:</strong> 
+                        <span class="status 
+                            {% if details.status == 'Pending' %}status-pending
+                            {% endif %}">
+                            {{ details.status }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
