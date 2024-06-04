@@ -15,5 +15,6 @@ urlpatterns=[
     path('appointment/',views.appointment,name="appointment"),
     path('doctorindex/',views.doctorindex,name="doctorindex"),
     path('approved/',views.approved,name="approved"),
+    path('endmeet/',views.endmeet,name="endmeet"),
 
 ]

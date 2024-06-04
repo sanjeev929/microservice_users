@@ -369,6 +369,32 @@ def appointment(request):
                 print(f"Error sending data: {e}")
     return redirect('/') 
 
+def endmeet(request):
+    try:
+        doctor_email = request.COOKIES.get('email')
+        print(doctor_email)
+        user = doctorscollection.find_one({"mail": doctor_email})
+        if doctor_email == user["mail"]:
+            if request.method == "POST":
+                patient_email = request.POST["patient_email"]
+                doctor_email = request.POST["doctor_email"]
+                server_b_url = 'http://127.0.0.1:8001/endmeeting/'
+                data = {
+                    "patient_email": patient_email,
+                    "doctor_email":doctor_email,
+                }
+                try:
+                    response = requests.post(server_b_url, json=data)
+                    response.raise_for_status()
+                    response_data = response.json()
+                except requests.exceptions.RequestException as e:
+                    print(f"Error sending data: {e}")
+                return redirect("/approved/")
+            else:
+                return redirect('/approved/')
+    except:
+        print("error===================")
+        return redirect('/approved/')
 def send_email_with_link(email, doctor_id):
 
     message = MIMEMultipart()

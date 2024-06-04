@@ -11,7 +11,7 @@ usercollection = db['users']
 managementcollection = db['management']
 doctorscollection = db['doctors']
 bookingcollection =db['booking']
-
+historycollection = db['history']
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -44,7 +44,6 @@ def book_appointment(request):
                 db.create_collection('booking')
             userdata = usercollection.find({"mail":email})
             userdata = list(userdata)
-            print(userdata)
             patient_name = ''.join([item['name'] for item in userdata])
             patient_age = ''.join([item['age'] for item in userdata])
             bookingcollection = db['booking']
@@ -192,4 +191,30 @@ def create_meeting(request):
             print(f"Error decoding JSON: {e}")
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
     else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)         
+        return JsonResponse({'error': 'Invalid request method'}, status=400)   
+
+@csrf_exempt
+def endmeeting(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            patient_email = data.get('patient_email')
+            doctor_email  = data.get('doctor_email')
+            if 'history' not in db.list_collection_names():
+                db.create_collection('history')
+            historycollection = db['history']
+            records = bookingcollection.find({'doctor_email': doctor_email,'patient_email':patient_email})
+            records = list(records)
+            if len(records) > 0:
+                for record in records:
+                    historycollection.insert_one(record)
+            bookingcollection.delete_many({'doctor_email': doctor_email,'patient_email':patient_email})
+            response_data = {
+                "message": "update successfully",
+            }
+            return JsonResponse(response_data,encoder=JSONEncoder, status=200)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON: {e}")
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)           

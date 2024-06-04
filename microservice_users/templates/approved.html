@@ -48,7 +48,7 @@
                 </div>    
                 {% endif %}
                 <div class="meeting-container">
-                <form method="post" action="/submit_emails/" class="card-form">
+                <form method="post" action="/endmeet/" class="card-form">
                     {% csrf_token %}
                     <input type="hidden" name="patient_email" value="{{ details.patient_email }}">
                     <input type="hidden" name="doctor_email" value="{{ details.doctor_email }}">
