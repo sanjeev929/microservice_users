@@ -167,6 +167,9 @@ h2 {
 .status-rejected {
     background-color: red;
 }
+
+/* Card buttons */
+
 .meeting-container {
     display: flex;
     align-items: center;
@@ -174,17 +177,13 @@ h2 {
     margin: 1px;
 }
 
-.meeting-link {
-    font-weight: bold;
-    color: #007bff;
-}
+/* Meeting button common styles */
 .meeting-button {
     display: inline-block;
     padding: 12px 24px;
     font-size: 18px;
     font-weight: bold;
     color: white;
-    background: linear-gradient(90deg, #007BFF 0%, #0056b3 100%);
     border: none;
     border-radius: 25px;
     text-decoration: none;
@@ -192,15 +191,49 @@ h2 {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .meeting-button:hover {
-    background: linear-gradient(90deg, #0056b3 0%, #003d80 100%);
     transform: translateY(-2px);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
+
 .meeting-button:active {
     transform: translateY(1px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+/* Blue button */
+.meeting-button.blue {
+    background: linear-gradient(90deg, #007BFF 0%, #0056b3 100%);
+}
+
+.meeting-button.blue:hover {
+    background: linear-gradient(90deg, #0056b3 0%, #003d80 100%);
+}
+
+/* Orange button */
+.meeting-button.orange {
+    background: linear-gradient(90deg, #FFA500 0%, #FF8C00 100%);
+}
+
+.meeting-button.orange:hover {
+    background: linear-gradient(90deg, #FF8C00 0%, #FF4500 100%);
+}
+
+/* Red button */
+.meeting-button.red {
+    background: linear-gradient(90deg, #FF0000 0%, #B22222 100%);
+}
+
+.meeting-button.red:hover {
+    background: linear-gradient(90deg, #B22222 0%, #8B0000 100%);
+}
+
+.meeting-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 @media (max-width: 768px) {
     .card {
         flex: 1 1 calc(50% - 20px);

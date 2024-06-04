@@ -153,3 +153,43 @@ def status_change(request):
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)     
+@csrf_exempt
+def doctor_approved(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            email = data.get('doctor_email')
+            bookingcollection = db['booking']
+            data = bookingcollection.find({"doctor_email":email})
+            bookingcollection = list(data)
+            approvedcollection = [item for item in bookingcollection if item.get('status') == 'Approved']
+            response_data = {
+                "message": "Booked successfully",
+                "approvedcollection":approvedcollection
+            }
+            return JsonResponse(response_data,encoder=JSONEncoder, status=200)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON: {e}")
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)  
+    
+@csrf_exempt
+def create_meeting(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            patient_email = data.get('patient_email')
+            doctor_email  = data.get('doctor_email')
+            meeting_link  = data.get('meeting_link')
+            bookingcollection = db['booking']
+            data = bookingcollection.update_many({"patient_email":patient_email,"doctor_email":doctor_email},{"$set":{"meeting_link":meeting_link}})
+            response_data = {
+                "message": "update successfully",
+            }
+            return JsonResponse(response_data,encoder=JSONEncoder, status=200)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON: {e}")
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)         

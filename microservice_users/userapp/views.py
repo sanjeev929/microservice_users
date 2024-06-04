@@ -145,48 +145,95 @@ def management(request):
     return redirect('/login/')
 
 def doctorindex(request):
-    doctor_email = request.COOKIES.get('email')
-    print(doctor_email)
-    user = doctorscollection.find_one({"mail": doctor_email})
-    if doctor_email == user["mail"]:
-        if request.method == "GET":
-            server_b_url = 'http://127.0.0.1:8001/doctor_index/'
-            data = {
-                "doctor_email": doctor_email,
-            }
-            try:
-                response = requests.post(server_b_url, json=data)
-                response.raise_for_status()
-                response_data = response.json()
-                pendingcollection=response_data["Pendingcollection"]
-                print(pendingcollection,"=======")
-                context = {
-                    "pendingcollection":pendingcollection
+    try:
+        doctor_email = request.COOKIES.get('email')
+        print(doctor_email)
+        user = doctorscollection.find_one({"mail": doctor_email})
+        if doctor_email == user["mail"]:
+            if request.method == "GET":
+                server_b_url = 'http://127.0.0.1:8001/doctor_index/'
+                data = {
+                    "doctor_email": doctor_email,
                 }
-                return render(request,"doctorindex.html",context)
-            except requests.exceptions.RequestException as e:
-                print(f"Error sending data: {e}")
-                return redirect('/')
-        else:
-            patient_email = request.POST["patient_email"]
-            doctor_email = request.POST["doctor_email"]
-            action = request.POST["action"]
-            print("==========",patient_email,action)
-            server_b_url = 'http://127.0.0.1:8001/status_change/'
-            data = {
-                "patient_email": patient_email,
-                "doctor_email":doctor_email,
-                "action":action
-            }
-            try:
-                response = requests.post(server_b_url, json=data)
-                response.raise_for_status()
-                response_data = response.json()
-            except requests.exceptions.RequestException as e:
-                print(f"Error sending data: {e}")
-            return redirect("/doctorindex/")   
-    return redirect('/login/')
-
+                try:
+                    response = requests.post(server_b_url, json=data)
+                    response.raise_for_status()
+                    response_data = response.json()
+                    pendingcollection=response_data["Pendingcollection"]
+                    print(pendingcollection,"=======")
+                    context = {
+                        "pendingcollection":pendingcollection
+                    }
+                    return render(request,"doctorindex.html",context)
+                except requests.exceptions.RequestException as e:
+                    print(f"Error sending data: {e}")
+                    return redirect('/')
+            else:
+                patient_email = request.POST["patient_email"]
+                doctor_email = request.POST["doctor_email"]
+                action = request.POST["action"]
+                print("==========",patient_email,action)
+                server_b_url = 'http://127.0.0.1:8001/status_change/'
+                data = {
+                    "patient_email": patient_email,
+                    "doctor_email":doctor_email,
+                    "action":action
+                }
+                try:
+                    response = requests.post(server_b_url, json=data)
+                    response.raise_for_status()
+                    response_data = response.json()
+                except requests.exceptions.RequestException as e:
+                    print(f"Error sending data: {e}")
+                return redirect("/doctorindex/")
+    except:
+        print("error")          
+        return redirect('/login/')
+def approved(request):
+    try:
+        doctor_email = request.COOKIES.get('email')
+        print(doctor_email)
+        user = doctorscollection.find_one({"mail": doctor_email})
+        if doctor_email == user["mail"]:
+            if request.method == "GET":
+                server_b_url = 'http://127.0.0.1:8001/doctor_approved/'
+                data = {
+                    "doctor_email": doctor_email,
+                }
+                try:
+                    response = requests.post(server_b_url, json=data)
+                    response.raise_for_status()
+                    response_data = response.json()
+                    approvedcollection=response_data["approvedcollection"]
+                    print(approvedcollection,"=======")
+                    context = {
+                        "approvedcollection":approvedcollection
+                    }
+                    return render(request,"approved.html",context)
+                except requests.exceptions.RequestException as e:
+                    print(f"Error sending data: {e}")
+                    return redirect('/')
+            else:
+                patient_email = request.POST["patient_email"]
+                doctor_email = request.POST["doctor_email"]
+                meeting_link = request.POST["meeting_link"]
+                print("==========",patient_email,meeting_link)
+                server_b_url = 'http://127.0.0.1:8001/create_meeting/'
+                data = {
+                    "patient_email": patient_email,
+                    "doctor_email":doctor_email,
+                    "meeting_link":meeting_link
+                }
+                try:
+                    response = requests.post(server_b_url, json=data)
+                    response.raise_for_status()
+                    response_data = response.json()
+                except requests.exceptions.RequestException as e:
+                    print(f"Error sending data: {e}")
+                return redirect("/approved/")
+    except:
+        print("error===================")
+        return redirect('/login/')
 def createdoctor(request):
     email = request.COOKIES.get('email')
     user = managementcollection.find_one({"mail": email})

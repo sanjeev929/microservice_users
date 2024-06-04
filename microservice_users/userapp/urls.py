@@ -14,4 +14,6 @@ urlpatterns=[
     path('book_appointment/',views.book_appointment,name="book_appointment"),
     path('appointment/',views.appointment,name="appointment"),
     path('doctorindex/',views.doctorindex,name="doctorindex"),
+    path('approved/',views.approved,name="approved"),
+
 ]

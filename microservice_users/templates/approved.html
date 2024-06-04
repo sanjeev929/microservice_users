@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page - Create Doctor</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/approved.css' %}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class="{% if request.path == '/doctorindex/' %}active{% endif %}"><a href="/doctorindex/">Home</a></li>
+            <li class="{% if request.path == '/approved/' %}active{% endif %}"><a href="/approved/">Approved</a></li>
+            <li class="logout"><a href="/logout/">Logout</a></li>
+        </ul>
+    </nav>
+    <br><br>
+    <div class="content">
+        <div class="card-container">
+            {% for details in approvedcollection %}
+            <div class="card">
+                <div class="card-content">
+                    <h2>Dr.{{ details.patient_name }}</h2>
+                    <p><strong>Schedule:</strong> {{ details.schedule }}</p>
+                    <p><strong>Problem:</strong> {{ details.problem }}</p>
+                    <p>
+                        <strong>Status:</strong> 
+                        <span class="status 
+                            {% if details.status == 'Approved' %}status-approved
+                            {% endif %}">
+                            {{ details.status }}
+                        </span>
+                    </p>
+                </div>
+                <div class="meeting-container">
+                    <form method="post" action="/approved/" onsubmit="createMeetingLink(event, '{{ details.patient_name }}', '{{ details.schedule }}', {{ forloop.counter }})">
+                        {% csrf_token %}
+                        <input type="hidden" name="patient_email" value="{{ details.patient_email }}">
+                        <input type="hidden" name="doctor_email" value="{{ details.doctor_email }}">
+                        <input type="hidden" name="meeting_link" id="meeting_link_{{ forloop.counter }}">
+                        <button type="button" class="meeting-button blue" onclick="createMeetingLink(event, '{{ details.patient_name }}', '{{ details.schedule }}', {{ forloop.counter }})">Create Meeting Link</button>
+                    </form>
+                </div>
+                {% if details.meeting_link %}
+                <div class="meeting-container">
+                    <a href="{{ details.meeting_link }}" target="_blank" class="meeting-button blue">Click to Join Meeting</a>
+                </div>    
+                {% endif %}
+                <div class="meeting-container">
+                <form method="post" action="/submit_emails/" class="card-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="patient_email" value="{{ details.patient_email }}">
+                    <input type="hidden" name="doctor_email" value="{{ details.doctor_email }}">
+                    <button type="submit" class="meeting-button red">End Consultation</button>
+                </form> 
+                </div>                      
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function createMeetingLink(event, patientName, schedule, counter) {
+            event.preventDefault();
+            const meetingLinkInput = document.getElementById('meeting_link_' + counter);
+            const roomName = (patientName + '_' + schedule).replace(/\s+/g, '_').replace(/[^\w-]+/g, '');
+            const meetingLink = `https://meet.jit.si/${roomName}`;
+            meetingLinkInput.value = meetingLink;
+            // Submit the form after setting the meeting link value
+            meetingLinkInput.closest('form').submit();
+        }
+    </script>
+</body>
+</html>

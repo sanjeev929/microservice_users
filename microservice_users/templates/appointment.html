@@ -34,6 +34,12 @@
                             {{ details.status }}
                         </span>
                     </p>
+                    {% if details.meeting_link %}
+                    <div class="meeting-container">
+                        <p><strong>Meeting Link:</strong></p>
+                        <a href="{{ details.meeting_link }}" target="_blank" class="meeting-button">Click to Join Meeting</a>
+                    </div>    
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
