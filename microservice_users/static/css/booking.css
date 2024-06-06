@@ -119,7 +119,7 @@ h2 {
 .appointment-form input[type="email"],
 .appointment-form input[type="date"],
 .appointment-form input[type="time"] {
-    width: 100%;
+    width: 95%;
     padding: 10px;
     margin-bottom: 20px;
     border: 2px solid #ccc;
