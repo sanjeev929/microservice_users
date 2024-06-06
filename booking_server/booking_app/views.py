@@ -208,6 +208,8 @@ def endmeeting(request):
             if len(records) > 0:
                 for record in records:
                     historycollection.insert_one(record)
+            history_count = historycollection.count_documents({'doctor_email': doctor_email})
+            doctorscollection.update_one({'mail': doctor_email},{"$set":{"doctor_level":history_count}})        
             bookingcollection.delete_many({'doctor_email': doctor_email,'patient_email':patient_email})
             response_data = {
                 "message": "update successfully",

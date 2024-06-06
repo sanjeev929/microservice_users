@@ -23,6 +23,11 @@
                 {% csrf_token %}
                 <button type="submit" class="card-button">
                     <div class="card-content">
+                        {%if details.doctor_level%}
+                        <span class="rank">⚡Level {{ details.doctor_level }}</span>
+                        {%else%}
+                        <span class="rank">⚡Level 0</span>
+                        {%endif%}
                         <h2>Dr.{{ details.name }}</h2>
                         <p><strong>Study:</strong> {{ details.study }}</p>
                         <p><strong>Specialist:</strong> {{ details.specialist }}</p>

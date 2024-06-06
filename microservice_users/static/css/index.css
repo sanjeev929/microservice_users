@@ -145,6 +145,19 @@ h2 {
     flex: 1 1 calc(33.33% - 20px);
     max-width: calc(33.33% - 20px); /* Ensure max width to handle different screen sizes */
     box-sizing: border-box; /* Ensure padding and border are included in the width and height */
+    position: relative; /* Add position relative to contain the rank */
+}
+
+.rank {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #007bff; /* Change this color as needed */
+    color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight:900;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 768px) {

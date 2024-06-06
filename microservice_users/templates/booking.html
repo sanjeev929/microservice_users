@@ -43,8 +43,47 @@
         
         <button type="submit">Submit</button>
     </form>
+    <div class="chart">
+        <h3>Booked Time Slots</h3>
+        <div class="bar" style="width: 40px;"></div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        const bookedDateArray = JSON.parse('{{ booked_date|escapejs }}');
+const chartContainer = document.querySelector('.chart');
+
+// Group booked time slots by date
+const bookedSlotsByDate = {};
+bookedDateArray.forEach(entry => {
+    const [date, time] = entry.split('/');
+    if (bookedSlotsByDate.hasOwnProperty(date)) {
+        bookedSlotsByDate[date].push(time);
+    } else {
+        bookedSlotsByDate[date] = [time];
+    }
+});
+
+// Sort time slots chronologically
+Object.keys(bookedSlotsByDate).forEach(date => {
+    bookedSlotsByDate[date].sort((a, b) => {
+        return new Date('1970/01/01 ' + a) - new Date('1970/01/01 ' + b);
+    });
+});
+
+// Add booked date and time slots dynamically to the chart
+Object.keys(bookedSlotsByDate).forEach(date => {
+    const dayLabel = document.createElement('div');
+    dayLabel.classList.add('day-label');
+    dayLabel.textContent = date;
+    chartContainer.appendChild(dayLabel);
+
+    bookedSlotsByDate[date].forEach(slot => {
+        const timeSlot = document.createElement('div');
+        timeSlot.classList.add('time-slot');
+        timeSlot.textContent = slot;
+        chartContainer.appendChild(timeSlot);
+    });
+});
         function checkBooking() {
             const selectedDate = document.getElementById("date").value;
             const selectedTime = document.getElementById("time").value;
