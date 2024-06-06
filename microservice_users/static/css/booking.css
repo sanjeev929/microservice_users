@@ -13,25 +13,85 @@ h2 {
 }
 
 /* Chart styles */
-.chart {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.card-container {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px; /* Adjust the gap as needed */
 }
 
-.day-label,h3 {
+.card {
+    background-color: white;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    width: calc(33.33% - 20px); /* Adjust width to ensure three cards per row with gaps */
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+    border: none; /* Remove form border */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: grey; /* Add grey border on hover */
+}
+
+.card-button {
+    background: none;
+    border: none;
+    padding: 0;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card h2 {
+    color: #007bff;
+    margin-top: 0;
+}
+
+.card p {
+    margin: 10px 0;
+    color: #333;
+}
+
+.card-button:hover .card-content {
+    background-color: #f0f0f0; /* Change card background color on hover */
+}
+
+/* Ensuring the card-container can handle multiple rows of three cards */
+.card {
+    flex: 1 1 calc(33.33% - 20px);
+    max-width: calc(33.33% - 20px); /* Ensure max width to handle different screen sizes */
+    box-sizing: border-box; /* Ensure padding and border are included in the width and height */
+    position: relative; /* Add position relative to contain the rank */
+}
+
+
+
+.day-label {
+    margin-left: 20px;
     margin-bottom: 10px;
     font-weight: bold;
-    color: #eaecee;
+    color: #007bff;
+    font-size: 18px;
 }
 
 .time-slot {
-    margin-left: 20px;
-    color: #f2f4f7;
+    margin-bottom: 10px;
+    margin-left: 40px;
+    color: #007bff;
+    font-size: 16px;
 }
 
 /* Additional styles for form */
