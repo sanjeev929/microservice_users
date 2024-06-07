@@ -17,7 +17,75 @@
             <li class="logout"><a href="/logout/">Logout</a></li>
         </ul>
     </nav>
+    <br>
+    <br>
+    <h3 class="pendingpatients">Pending List of Patients</h3>
+    <br>
+    <br>
     <div class="content">
+        <div class="card-container">
+            {% for details in pendingcollection %}
+            <div class="card">
+                <div class="card-content">
+                    <h2>Dr.{{ details.doctor_name }}</h2>
+                    <p><strong>Patient Name:</strong> {{ details.patient_name }}</p>
+                    <p><strong>Schedule:</strong> {{ details.schedule }}</p>
+                    <p><strong>Problem:</strong> {{ details.problem }}</p>
+                    <p>
+                        <strong>Status:</strong> 
+                        <span class="status 
+                            {% if details.status == 'Pending' %}status-pending
+                            {% elif details.status == 'Approved' %}status-approved
+                            {% elif details.status == 'Rejected' %}status-rejected
+                            {% endif %}">
+                            {{ details.status }}
+                        </span>
+                    </p>
+                    {% if details.meeting_link %}
+                    <div class="meeting-container">
+                        <p><strong>Meeting Link:</strong></p>
+                        <a href="{{ details.meeting_link }}" target="_blank" class="meeting-button">Click to Join Meeting</a>
+                    </div>    
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+    <br>
+    <h3 class="approvedpatients">Approved List of Patients</h3>
+    <br>
+    <br>
+    <div class="content">
+        <div class="card-container">
+            {% for details in approvedcollection %}
+            <div class="card">
+                <div class="card-content">
+                    <h2>Dr.{{ details.doctor_name }}</h2>
+                    <p><strong>Patient Name:</strong> {{ details.patient_name }}</p>
+                    <p><strong>Schedule:</strong> {{ details.schedule }}</p>
+                    <p><strong>Problem:</strong> {{ details.problem }}</p>
+                    <p>
+                        <strong>Status:</strong> 
+                        <span class="status 
+                            {% if details.status == 'Pending' %}status-pending
+                            {% elif details.status == 'Approved' %}status-approved
+                            {% elif details.status == 'Rejected' %}status-rejected
+                            {% endif %}">
+                            {{ details.status }}
+                        </span>
+                    </p>
+                    {% if details.meeting_link %}
+                    <div class="meeting-container">
+                        <p><strong>Meeting Link:</strong></p>
+                        <a href="{{ details.meeting_link }}" target="_blank" class="meeting-button">Click to Join Meeting</a>
+                    </div>    
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>

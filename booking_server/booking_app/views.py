@@ -219,4 +219,27 @@ def endmeeting(request):
             print(f"Error decoding JSON: {e}")
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
     else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)           
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+def management(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            email = data.get('managementemail')
+            bookingcollection = db['booking']
+            data = bookingcollection.find()
+            bookingcollection = list(data)
+            approvedcollection = [item for item in bookingcollection if item.get('status') == 'Approved']
+            pendingcollection = [item for item in bookingcollection if item.get('status') == 'Pending']
+            response_data = {
+                "message": "Booked successfully",
+                "approvedcollection":approvedcollection,
+                "pendingcollection":pendingcollection
+            }
+            return JsonResponse(response_data,encoder=JSONEncoder, status=200)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON: {e}")
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)                

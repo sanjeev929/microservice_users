@@ -25,7 +25,7 @@
         <label for="doctor-select">Select Doctor:</label>
         <select id="doctor-select" name="name">
           {% for doctor in alldoctors %}
-          <option value="{{ doctor.mail }}">{{ doctor.name }}</option>
+          <option value="{{ doctor.mail }}">Dr.{{ doctor.name }}</option>
           {% endfor %}
         </select>
       </div>

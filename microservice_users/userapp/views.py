@@ -141,6 +141,26 @@ def management(request):
     email = request.COOKIES.get('email')
     user = managementcollection.find_one({"mail": email})
     if email == user["mail"]:
+        if request.method == "GET":
+                server_b_url = 'http://127.0.0.1:8001/management/'
+                data = {
+                    "managementemail": email,
+                }
+                try:
+                    response = requests.post(server_b_url, json=data)
+                    response.raise_for_status()
+                    response_data = response.json()
+                    approvedcollection=response_data["approvedcollection"]
+                    pendingcollection=response_data["pendingcollection"]
+                    print(pendingcollection,"=======")
+                    context = {
+                        "pendingcollection":pendingcollection,
+                        "approvedcollection":approvedcollection
+                    }
+                    return render(request,"management.html",context)
+                except requests.exceptions.RequestException as e:
+                    print(f"Error sending data: {e}")
+                    return redirect('/')
         return render(request, 'management.html')
     return redirect('/login/')
 

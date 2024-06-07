@@ -1,5 +1,3 @@
-/* Add your existing CSS styles here */
-
 /* Form and page styles */
 body {
     background: linear-gradient(135deg, #007bff 0%, #007bff 50%, white 50%, white 100%);
@@ -12,12 +10,19 @@ h2 {
     color: #007bff;
 }
 
+/* Container for form and chart card */
+.content-container {
+    display: flex;
+    justify-content: space-evenly; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    gap: 20px; /* Adjust the gap between the chart and the form */
+    height: 100vh; /* Ensure the container takes up full viewport height */
+}
+
 /* Chart styles */
 .card-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 20px; /* Adjust the gap as needed */
+    justify-content: center; /* Center the card horizontally */
 }
 
 .card {
@@ -28,12 +33,13 @@ h2 {
     overflow: hidden;
     text-decoration: none;
     color: inherit;
-    width: calc(33.33% - 20px); /* Adjust width to ensure three cards per row with gaps */
+    width: 100%;
+    max-width: 400px;
     transition: transform 0.2s, border-color 0.2s;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 0;
+    padding: 20px;
     border: none; /* Remove form border */
 }
 
@@ -42,45 +48,13 @@ h2 {
     border-color: grey; /* Add grey border on hover */
 }
 
-.card-button {
-    background: none;
-    border: none;
-    padding: 0;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-}
-
-.card-content {
-    padding: 20px;
-}
-
-.card h2 {
-    color: #007bff;
+.card h3 {
     margin-top: 0;
+    color: #007bff;
 }
-
-.card p {
-    margin: 10px 0;
-    color: #333;
-}
-
-.card-button:hover .card-content {
-    background-color: #f0f0f0; /* Change card background color on hover */
-}
-
-/* Ensuring the card-container can handle multiple rows of three cards */
-.card {
-    flex: 1 1 calc(33.33% - 20px);
-    max-width: calc(33.33% - 20px); /* Ensure max width to handle different screen sizes */
-    box-sizing: border-box; /* Ensure padding and border are included in the width and height */
-    position: relative; /* Add position relative to contain the rank */
-}
-
-
 
 .day-label {
-    margin-left: 20px;
+    margin-left: 0;
     margin-bottom: 10px;
     font-weight: bold;
     color: #007bff;
@@ -89,19 +63,21 @@ h2 {
 
 .time-slot {
     margin-bottom: 10px;
-    margin-left: 40px;
+    margin-left: 20px;
     color: #007bff;
     font-size: 16px;
 }
 
 /* Additional styles for form */
 .appointment-form {
-    max-width: 400px;
-    margin: 0 auto;
+    max-width: 800px; /* Increase form width */
     padding: 20px;
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .appointment-form h2 {

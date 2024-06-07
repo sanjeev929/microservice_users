@@ -17,39 +17,40 @@
             <li class="logout"><a href="/logout/">Logout</a></li>
         </ul>
     </nav>
-    <br><br>
-    <form class="appointment-form" method="POST" action="/book_appointment/" onsubmit="return checkBooking()">
-        {% csrf_token %}
-        <h2>Book an Appointment</h2>
-        <label for="name">Dr Name:</label>
-        <input type="text" id="name" name="nadoctor_nameme" value="{{doctor_name}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
+    <br><br><br><br>
+    <div class="content-container">
+        <form class="appointment-form" method="POST" action="/book_appointment/" onsubmit="return checkBooking()">
+            {% csrf_token %}
+            <h2>Book an Appointment</h2>
+            <label for="name">Dr Name:</label>
+            <input type="text" id="name" name="nadoctor_nameme" value="{{doctor_name}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
 
-        <input type="hidden" name="doctor_email" value="{{doctor_email}}">
+            <input type="hidden" name="doctor_email" value="{{doctor_email}}">
 
-        <label for="study">Study:</label>
-        <input type="text" id="study" name="study" value="{{doctor_study}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
+            <label for="study">Study:</label>
+            <input type="text" id="study" name="study" value="{{doctor_study}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
 
-        <label for="specialist">Specialist:</label>
-        <input type="text" id="specialist" name="specialist" value="{{doctor_specialist}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
-        
-        <label for="Problem">Problem:</label>
-        <input type="text" id="problem" name="problem" required>
+            <label for="specialist">Specialist:</label>
+            <input type="text" id="specialist" name="specialist" value="{{doctor_specialist}}" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
+            
+            <label for="Problem">Problem:</label>
+            <input type="text" id="problem" name="problem" required>
 
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" required>
-        
-        <label for="time">Time:</label>
-        <input type="time" id="time" name="time" required>
-        
-        <button type="submit">Submit</button>
-    </form>
-    <div class="card-container">
-        <div class="card chart">
-            <h3>Booked Time Slots</h3>
-            <div class="bar" style="width: 40px;"></div>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+            
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" required>
+            
+            <button type="submit">Submit</button>
+        </form>
+        <div class="card-container">
+            <div class="card chart">
+                <h3>Booked Time Slots</h3>
+                <div class="bar" style="width: 40px;"></div>
+            </div>
         </div>
     </div>
-    
     
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
@@ -112,5 +113,5 @@
             minuteIncrement: 15
         });
     </script>
-    </body>
+</body>
 </html>
