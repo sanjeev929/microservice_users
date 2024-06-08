@@ -308,30 +308,40 @@ def doctorsetpassword(request):
     return render(request,"doctorsetpassword.html",context)
 
 def editdoctor(request):
-    if request.method == "POST":
-        name = request.POST["name"]
-        dob = request.POST["dob"]
-        email = request.POST["email"]
-        study = request.POST["study"]
-        specialist = request.POST["specialist"]
-        doctorscollection.update_one({'mail': email}, {'$set': {'name': name,"dob":dob,"study":study,"specialist":specialist}})
-    alldoctor = doctorscollection.find()
-    alldoctor = list(alldoctor)
-    context={
-        "alldoctors":alldoctor
-    }
-    return render(request,"editdoctor.html",context)
+    email = request.COOKIES.get('email')
+    user = managementcollection.find_one({"mail": email})
+    if email == user["mail"]:
+        if request.method == "POST":
+            name = request.POST["name"]
+            dob = request.POST["dob"]
+            email = request.POST["email"]
+            study = request.POST["study"]
+            specialist = request.POST["specialist"]
+            doctorscollection.update_one({'mail': email}, {'$set': {'name': name,"dob":dob,"study":study,"specialist":specialist}})
+        alldoctor = doctorscollection.find()
+        alldoctor = list(alldoctor)
+        context={
+            "alldoctors":alldoctor
+        }
+        return render(request,"editdoctor.html",context)
+    else:
+        return redirect("/login/")
 
 def deletedoctor(request):
-    if request.method == "POST":
-        email = request.POST["name"]
-        doctorscollection.delete_one({'mail': email})
-    alldoctor = doctorscollection.find()
-    alldoctor = list(alldoctor)
-    context={
-        "alldoctors":alldoctor
-    }
-    return render(request,"deletedoctor.html",context)
+    email = request.COOKIES.get('email')
+    user = managementcollection.find_one({"mail": email})
+    if email == user["mail"]:
+        if request.method == "POST":
+            email = request.POST["name"]
+            doctorscollection.delete_one({'mail': email})
+        alldoctor = doctorscollection.find()
+        alldoctor = list(alldoctor)
+        context={
+            "alldoctors":alldoctor
+        }
+        return render(request,"deletedoctor.html",context)
+    else:
+        return redirect("/login/")
 
 def book_appointment(request):
     email = request.COOKIES.get('email')
@@ -415,6 +425,36 @@ def endmeet(request):
     except:
         print("error===================")
         return redirect('/approved/')
+def dashboard(request):
+    email = request.COOKIES.get('email')
+    user = managementcollection.find_one({"mail": email})
+    if email == user["mail"]:
+        try:
+            if request.method == "GET":
+                server_b_url = 'http://127.0.0.1:8001/dashboard/'
+                data = {
+                    "email": email,
+                }
+                try:
+                    response = requests.post(server_b_url, json=data)
+                    response.raise_for_status()
+                    response_data = response.json()
+                    # booked_data=response_data["bookingcollection"]
+                    # print(booked_data)
+                    # context={
+                    #     "message":booked_data
+                    # }
+                    return render(request,"dashboard.html")
+                except requests.exceptions.RequestException as e:
+                    print(f"Error sending data: {e}")
+                return redirect("/login/")
+            else:
+                return redirect('/login/')
+        except:
+            print("error===================")
+            return redirect('/login/')
+    else:
+        return redirect("/login/")    
 def send_email_with_link(email, doctor_id):
 
     message = MIMEMultipart()

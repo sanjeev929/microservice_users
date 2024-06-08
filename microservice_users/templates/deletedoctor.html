@@ -11,6 +11,7 @@
   <nav>
     <ul>
       <li class="{% if request.path == '/management/' %}active{% endif %}"><a href="/management/">Home</a></li>
+      <li class="{% if request.path == '/dashboard/' %}active{% endif %}"><a href="/dashboard/">Dashboard</a></li>
       <li class="{% if request.path == '/createdoctor/' %}active{% endif %}"><a href="/createdoctor/">Create Doctor</a></li>
       <li class="{% if request.path == '/editdoctor/' %}active{% endif %}"><a href="/editdoctor/">Edit Doctor</a></li>
       <li class="{% if request.path == '/deletedoctor/' %}active{% endif %}"><a href="/deletedoctor/">Delete Doctor</a></li>

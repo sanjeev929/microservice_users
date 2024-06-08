@@ -11,5 +11,6 @@ urlpatterns = [
     path("doctor_approved/",views.doctor_approved,name="doctor_approved"),
     path("create_meeting/",views.create_meeting,name="create_meeting"),
     path("endmeeting/",views.endmeeting,name="endmeeting"),
-    path("management/",views.management,name="management")
+    path("management/",views.management,name="management"),
+    path("dashboard/",views.dashboard,name="dashboard"),
 ]

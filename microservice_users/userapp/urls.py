@@ -16,5 +16,6 @@ urlpatterns=[
     path('doctorindex/',views.doctorindex,name="doctorindex"),
     path('approved/',views.approved,name="approved"),
     path('endmeet/',views.endmeet,name="endmeet"),
+    path('dashboard/',views.dashboard,name="dashboard"),
 
 ]

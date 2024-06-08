@@ -1,0 +1,229 @@
+/* Navigation bar styles */
+nav {
+    position: relative;
+    background: linear-gradient(135deg, #007bff 0%, #007bff 50%, white 50%, white 100%);
+    padding: 10px 0;
+    border: 0; /* Remove the default border */
+}
+
+nav::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, white 0%, white 50%, #007bff 50%, #007bff 100%);
+    z-index: -1; /* Place it behind the nav */
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 10px;
+}
+
+nav ul li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 15px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+nav ul li.logout {
+    margin-left: auto; /* Push the logout link to the right */
+}
+
+nav ul li.logout a {
+    color: #007bff;
+    background-color: white; /* Set initial background color for logout */
+}
+
+nav ul li.logout a:hover {
+    background-color: #0056b3;
+    color: white; /* Change text color on hover */
+}
+
+nav ul li.active a {
+    background-color: white; /* Darker color for active link */
+    color: #0056b3;
+}
+
+nav ul li a:hover {
+    background-color: #ffffff;
+    color: #0056b3;
+}
+
+/* Form and page styles */
+body {
+    background: linear-gradient(135deg, #007bff 0%, #007bff 50%, white 50%, white 100%);
+    font-family: Arial, sans-serif;
+    color: #333;
+    padding: 20px;
+}
+
+h2 {
+    color: #007bff;
+}
+
+.pendingpatients{
+    background-color: #ffffff;
+    border: #ffffff;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-weight:900;
+    color: #007bff;
+}
+.approvedpatients{
+    background-color: #007bff;
+    border: #007bff;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-weight:900;
+    color: #ffffff;
+}
+/* Card styles */
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: white;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    flex: 1 1 calc(50% - 20px); /* Adjust width to ensure two cards per row with gaps */
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+    border: none; /* Remove form border */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: grey; /* Add grey border on hover */
+}
+
+.card-button {
+    background: none;
+    border: none;
+    padding: 0;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card h2 {
+    color: #007bff;
+    margin-top: 0;
+}
+
+.card p {
+    margin: 10px 0;
+    color: #333;
+}
+
+.card-button:hover .card-content {
+    background-color: #f0f0f0; /* Change card background color on hover */
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.status-pending {
+    background-color: orange;
+}
+
+.status-approved {
+    background-color: green;
+}
+
+.status-rejected {
+    background-color: red;
+}
+.meeting-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1px;
+}
+
+.meeting-link {
+    font-weight: bold;
+    color: #007bff;
+}
+.meeting-button {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(90deg, #007BFF 0%, #0056b3 100%);
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.meeting-button:hover {
+    background: linear-gradient(90deg, #0056b3 0%, #003d80 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+.meeting-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.rank {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #007bff; /* Change this color as needed */
+    color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight:900;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+@media (max-width: 768px) {
+    .card {
+        flex: 1 1 calc(50% - 20px);
+        max-width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
