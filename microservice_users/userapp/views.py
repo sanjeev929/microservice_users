@@ -7,6 +7,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from bson import ObjectId
 from django.middleware.csrf import get_token
+import random
 
 client = pymongo.MongoClient(settings.MONGODB_URI)
 db = client[settings.MONGODB_NAME]
@@ -425,6 +426,7 @@ def endmeet(request):
     except:
         print("error===================")
         return redirect('/approved/')
+
 def dashboard(request):
     email = request.COOKIES.get('email')
     user = managementcollection.find_one({"mail": email})
@@ -439,12 +441,34 @@ def dashboard(request):
                     response = requests.post(server_b_url, json=data)
                     response.raise_for_status()
                     response_data = response.json()
-                    # booked_data=response_data["bookingcollection"]
-                    # print(booked_data)
-                    # context={
-                    #     "message":booked_data
-                    # }
-                    return render(request,"dashboard.html")
+                    namecollection=response_data["namecollection"]
+                    deptcollection=response_data["deptcollection"]
+                    levelcollection=response_data["levelcollection"]
+                    dept_points = {}
+                    for dept, points in zip(deptcollection, levelcollection):
+                        points = int(points)
+                        if dept in dept_points:
+                            dept_points[dept] += points
+                        else:
+                            dept_points[dept] = points
+                    departments = list(dept_points.keys())
+                    points = [str(value) for value in dept_points.values()]
+                    def random_color():
+                        return "#{:06x}".format(random.randint(0, 0xFFFFFF))
+
+                    barColors = [random_color() for _ in range(len(namecollection))]
+                    deptColors = [random_color() for _ in range(len(departments))]
+                    print(namecollection,levelcollection,departments,points,"=======================")
+                        
+                    context={
+                        "namecollection":namecollection,
+                        "departments":departments,
+                        "points":points,
+                        "levelcollection":levelcollection,
+                        "barColors":barColors,
+                        "deptColors":deptColors
+                    }
+                    return render(request,"dashboard.html",context)
                 except requests.exceptions.RequestException as e:
                     print(f"Error sending data: {e}")
                 return redirect("/login/")
@@ -454,7 +478,8 @@ def dashboard(request):
             print("error===================")
             return redirect('/login/')
     else:
-        return redirect("/login/")    
+        return redirect("/login/")
+     
 def send_email_with_link(email, doctor_id):
 
     message = MIMEMultipart()

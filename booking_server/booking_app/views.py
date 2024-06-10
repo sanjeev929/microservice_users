@@ -46,7 +46,6 @@ def book_appointment(request):
             userdata = list(userdata)
             patient_name = ''.join([item['name'] for item in userdata])
             patient_age = ''.join([item['age'] for item in userdata])
-            bookingcollection = db['booking']
             book_data = {
                 "doctor_name":doctor_name,
                 "doctor_email": doctor_email,
@@ -250,15 +249,26 @@ def dashboard(request):
         try:
             data = json.loads(request.body)
             email = data.get('email')
-            bookingcollection = db['booking']
-            data = bookingcollection.find()
-            bookingcollection = list(data)
-            approvedcollection = [item for item in bookingcollection if item.get('status') == 'Approved']
-            pendingcollection = [item for item in bookingcollection if item.get('status') == 'Pending']
+            doctorscollection = db['doctors']
+            data = doctorscollection.find()
+            doctorscollection = list(data)
+            namecollection = []
+            deptcollection = []
+            levelcollection = []
+            for item in doctorscollection:
+                if item["name"]:
+                    try:
+                        namecollection.append(item["name"])
+                        deptcollection.append(item["specialist"])
+                        levelcollection.append(item['doctor_level'])
+                    except:
+                        levelcollection.append('0')
+                
             response_data = {
                 "message": "Booked successfully",
-                "approvedcollection":approvedcollection,
-                "pendingcollection":pendingcollection
+                "namecollection":namecollection,
+                "deptcollection":deptcollection,
+                "levelcollection":levelcollection
             }
             return JsonResponse(response_data,encoder=JSONEncoder, status=200)
         except json.JSONDecodeError as e:

@@ -36,9 +36,9 @@
         </div>
     </div>
 <script>
-    var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-    var yValues = [55, 49, 44, 24, 15];
-    var barColors = ["red", "green","blue","orange","brown"];
+    var xValues = {{namecollection|safe}};
+    var yValues = {{levelcollection|safe}};
+    var barColors = {{barColors|safe}};
 
     new Chart("myChart1", {
         type: "bar",
@@ -58,15 +58,9 @@
         }
     });
 
-    var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-    var yValues = [55, 49, 44, 24, 15];
-    var barColors = [
-    "#b91d47",
-    "#00aba9",
-    "#2b5797",
-    "#e8c3b9",
-    "#1e7145"
-    ];
+    var xValues = {{departments|safe}};
+    var yValues = {{points|safe}};
+    var barColors = {{deptColors|safe}};
 
     new Chart("myChart2", {
     type: "doughnut",
