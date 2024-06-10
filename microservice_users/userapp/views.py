@@ -18,53 +18,60 @@ ipaddress = "http://192.168.249.87:8000"
 
 
 def index(request):
-    email = request.COOKIES.get('email')
-    if email:
-        if request.method == "GET":
-            server_b_url = 'http://127.0.0.1:8001/userindex/'
+    try:
+        email = request.COOKIES.get('email')
+        user = usercollection.find_one({"mail": email})
 
-            try:
-                response = requests.get(server_b_url)
-                response.raise_for_status()
-                response_data = response.json()
-                context = {
-                    'message': response_data['doctor_details'],
-                    "email":email
-                    }
-                return render(request, 'index.html', context)
+        if email == user["mail"]:
+            print("user")
+            if request.method == "GET":
+                server_b_url = 'http://127.0.0.1:8001/userindex/'
 
-            except requests.exceptions.RequestException as e:
-                print(f"Error sending data: {e}")
-                context = {'message': 'Error sending data to another service'}
-                return render(request, 'index.html', context)
-        else:
-            doctor_name = request.POST["doctor_name"]
-            doctor_email = request.POST["doctor_email"]
-            doctor_study = request.POST["doctor_study"]
-            doctor_specialist = request.POST["doctor_specialist"]
-            server_b_url = 'http://127.0.0.1:8001/get_doctor_schedule/'
-            data = {
-                "doctor_email": doctor_email,
-            }
-            try:
-                response = requests.post(server_b_url, json=data)
-                response.raise_for_status()
-                response_data = response.json()
-                booked_date=response_data["schedule_values"]
-                booked_date_json = json.dumps(booked_date)
-                context ={
-                    "doctor_name":doctor_name,
-                    "doctor_email":doctor_email,
-                    "doctor_study":doctor_study,
-                    "doctor_specialist":doctor_specialist,
-                    "booked_date":booked_date_json
+                try:
+                    response = requests.get(server_b_url)
+                    response.raise_for_status()
+                    response_data = response.json()
+                    context = {
+                        'message': response_data['doctor_details'],
+                        "email":email
+                        }
+                    return render(request, 'index.html', context)
+
+                except requests.exceptions.RequestException as e:
+                    print(f"Error sending data: {e}")
+                    context = {'message': 'Error sending data to another service'}
+                    return render(request, 'index.html', context)
+            else:
+                doctor_name = request.POST["doctor_name"]
+                doctor_email = request.POST["doctor_email"]
+                doctor_study = request.POST["doctor_study"]
+                doctor_specialist = request.POST["doctor_specialist"]
+                server_b_url = 'http://127.0.0.1:8001/get_doctor_schedule/'
+                data = {
+                    "doctor_email": doctor_email,
                 }
-                return render(request,"booking.html",context)
-            except requests.exceptions.RequestException as e:
-                print(f"Error sending data: {e}")
-                return redirect('/')
-    else:
-        return redirect('/login/')
+                try:
+                    response = requests.post(server_b_url, json=data)
+                    response.raise_for_status()
+                    response_data = response.json()
+                    booked_date=response_data["schedule_values"]
+                    booked_date_json = json.dumps(booked_date)
+                    context ={
+                        "doctor_name":doctor_name,
+                        "doctor_email":doctor_email,
+                        "doctor_study":doctor_study,
+                        "doctor_specialist":doctor_specialist,
+                        "booked_date":booked_date_json
+                    }
+                    return render(request,"booking.html",context)
+                except requests.exceptions.RequestException as e:
+                    print(f"Error sending data: {e}")
+                    return redirect('/')
+        else:
+            print("======")
+            return redirect('/login/')
+    except:
+        return redirect('/login/') 
 
 
 def registration(request):

@@ -1,0 +1,63 @@
+/* Background styles */
+body {
+    background: #f0f0f0;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Container styles */
+.container {
+    text-align: center;
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 90%;
+}
+
+/* Heading styles */
+.container h1 {
+    font-size: 80px;
+    margin: 0;
+    color: #007bff;
+}
+
+/* Paragraph styles */
+.container p {
+    font-size: 20px;
+    margin: 20px 0;
+    color: #555;
+}
+
+/* Home link styles */
+.container .home-link {
+    display: inline-block;
+    padding: 14px 28px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: #007bff;
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container .home-link:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.container .home-link:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
