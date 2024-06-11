@@ -1,1 +1,1 @@
-web: gunicorn 'microservice_users.wsgi'
+web: gunicorn microservice_users.wsgi
