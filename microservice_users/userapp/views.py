@@ -262,6 +262,7 @@ def approved(request):
     except:
         print("error===================")
         return redirect('/login/')
+
 def createdoctor(request):
     email = request.COOKIES.get('email')
     user = managementcollection.find_one({"mail": email})
