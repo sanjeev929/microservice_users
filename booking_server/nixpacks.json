@@ -13,12 +13,12 @@
       },
       "start": {
         "commands": [
-          "gunicorn booking_server.wsgi:application"
+          "gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT"
         ]
       }
     },
     "environment": {
-      "DJANGO_SETTINGS_MODULE": "booking_server.settings"
+      "DJANGO_SETTINGS_MODULE": "myproject.settings"
     }
   }
   
